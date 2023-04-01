@@ -1,0 +1,44 @@
+html {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  margin-bottom: 60px;
+  background-color: beige;
+}
+
+thead tr {
+    border-bottom-width: 1px;
+    border-color: currentColor;
+    text-align: center;
+}
+
+.basic-button {
+    width: fit-content;
+    border: 1px solid #8a8a8a;
+    background: azure;
+    border-radius: 7px;
+    color: #000;
+    height: 40px;
+    margin-top: 20px;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+    text-decoration: none;
+}
+
+td {
+    line-height: 100px;
+    text-align: center;
+}
