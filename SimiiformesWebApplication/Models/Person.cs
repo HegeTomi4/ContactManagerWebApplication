@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using Microsoft.AspNetCore.Identity.UI.V4.Pages.Account.Manage.Internal;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SimiiformesWebApplication.Models
 {
