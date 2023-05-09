@@ -4,10 +4,11 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Kapcsolatok</h1>
+<h1>Kapcsolatok <a asp-action="Create"><i class="fa-solid fa-circle-plus fa-xl" style="color: #31a53f;"></i></a></h1>
 
-<p>
-    <a asp-action="Create">Hozzáadás</a>
+<p style="float:right">
+    
+    <a asp-action="Deleted">Törölt kapcsolatok</a>
 </p>
 <table class="table">
     <thead>
@@ -50,9 +51,9 @@
             </td>
 
             <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Szerkeszt</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Részletek</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Töröl</a>
+                    <a asp-action="Edit" asp-route-id="@item.Id"><i class="fa-solid fa-pen-to-square fa-xl" style="color: #2739c4;"></i></a> |
+                    <a asp-action="Details" asp-route-id="@item.Id"><i class="fa-solid fa-circle-info fa-xl" style="color: #2739c4;"></i></a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id"><i class="fa-solid fa-trash fa-xl" style="color: #2739c4;"></i></a>
             </td>
         </tr>
 }

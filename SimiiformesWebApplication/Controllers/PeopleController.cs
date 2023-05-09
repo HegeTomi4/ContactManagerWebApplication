@@ -19,7 +19,15 @@ namespace SimiiformesWebApplication.Controllers
         public async Task<IActionResult> Index()
         {
             return _context.Person != null ?
-                        View(await _context.Person.ToListAsync()) :
+                        View(await _context.Person.Where(p => p.Visible == true).ToListAsync()) :
+                          Problem("Entity set 'ApplicationDbContext.Person'  is null.");
+        }
+
+        // GET: DeletedPeople
+        public async Task<IActionResult> Deleted()
+        {
+            return _context.Person != null ?
+                        View(await _context.Person.Where(p => p.Visible == false).ToListAsync()) :
                           Problem("Entity set 'ApplicationDbContext.Person'  is null.");
         }
 
@@ -58,6 +66,25 @@ namespace SimiiformesWebApplication.Controllers
             return View(person);
         }
 
+        // GET: People/DeletedDetails/5
+        public async Task<IActionResult> DeletedDetails(int? id)
+        {
+            if (id == null || _context.Person == null)
+            {
+                return NotFound();
+            }
+
+            var person = await _context.Person
+                .Include(p => p.Histories)
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (person == null)
+            {
+                return NotFound();
+            }
+
+            return View(person);
+        }
+
         //Delete wrong history
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -79,7 +106,7 @@ namespace SimiiformesWebApplication.Controllers
 
         // GET: People/Create
         //Ellenőrzi, hogy a felhasználó, aki használni kivánja a Create funkciót, rendelkezik-e a szükséges jogosultsággal
-        [Authorize(Roles = $"{nameof(Role.Administrator)},{nameof(Role.Manager)}")]
+        [Authorize]
         public IActionResult Create()
         {
             return View();
@@ -111,6 +138,7 @@ namespace SimiiformesWebApplication.Controllers
                 {
                     person.ImagePath = "/Sources/PeopleImages/Default.jpg";
                 }
+                person.Visible = true;
                 _context.Add(person);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -259,7 +287,46 @@ namespace SimiiformesWebApplication.Controllers
             var person = await _context.Person.FindAsync(id);
             if (person != null)
             {
-                _context.Person.Remove(person);
+                person.Visible = false;
+            }
+
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
+
+        // GET: People/Restore/5
+        [Authorize]
+        public async Task<IActionResult> Restore(int? id)
+        {
+            if (id == null || _context.Person == null)
+            {
+                return NotFound();
+            }
+
+            var person = await _context.Person
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (person == null)
+            {
+                return NotFound();
+            }
+
+            return View(person);
+        }
+
+        // POST: People/Restore/5
+        [Authorize]
+        [HttpPost, ActionName("Restore")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> RestoreConfirmed(int id)
+        {
+            if (_context.Person == null)
+            {
+                return Problem("Entity set 'ApplicationDbContext.Person'  is null.");
+            }
+            var person = await _context.Person.FindAsync(id);
+            if (person != null)
+            {
+                person.Visible = true;
             }
 
             await _context.SaveChangesAsync();

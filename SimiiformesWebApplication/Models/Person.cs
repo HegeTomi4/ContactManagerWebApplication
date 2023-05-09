@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity.UI.V4.Pages.Account.Manage.Internal;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SimiiformesWebApplication.Models
 {
@@ -16,13 +15,14 @@ namespace SimiiformesWebApplication.Models
         public string? ImagePath { get; set; }
         [NotMapped]
         public IFormFile? ImageFile { get; set; }
+        //Törlés esetén ne vesszen el az adat
+        public bool Visible { get; set; }
 
         //Pozíció előzmények táblával összeköttetés
         public ICollection<History>? Histories { get; set; }
 
         public Person()
         {
-
         }
     }
 }
