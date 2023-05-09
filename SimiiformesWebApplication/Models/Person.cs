@@ -16,6 +16,8 @@ namespace SimiiformesWebApplication.Models
         [NotMapped]
         public IFormFile? ImageFile { get; set; }
 
+        //Pozíció előzmények táblával összeköttetés
+        public ICollection<History>? Histories { get; set; }
 
         public Person()
         {

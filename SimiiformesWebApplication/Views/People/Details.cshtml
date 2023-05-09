@@ -57,6 +57,28 @@
     </dl>
 </div>
 <div>
+    <h5>Előző munkahelyek</h5>
+    <table>
+    @foreach (var history in Model.Histories)
+    {
+        <tr>
+            <td>@history.Company:</td>
+            <td>@history.Position</td>
+            <td>
+                <form asp-controller="People" asp-action="DeleteHistory" method="post">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="id" value="@history.Id" />
+                    <button type="submit" class="btn btn-danger"
+                        onclick="return confirm('Are you sure you want to delete this history record?')">
+                        Delete
+                    </button>
+                </form>
+            </td>
+        </tr>
+    }
+    </table>
+</div>
+<div>
     <a asp-action="Edit" asp-route-id="@Model?.Id">Szerkeszt</a> |
     <a asp-action="Index">Vissza</a>
 </div>
