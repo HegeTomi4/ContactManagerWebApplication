@@ -75,5 +75,8 @@
     </table>
 </div>
 <div>
-    <a asp-action="Deleted">Vissza</a>
+    <form asp-action="Restore">
+        <a asp-action="Restore" asp-route-id="Model.Id">Visszaállít</a> |
+        <a asp-action="Deleted">Vissza</a>
+    </form>
 </div>
