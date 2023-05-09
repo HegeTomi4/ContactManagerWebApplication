@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using SimiiformesWebApplication.Models;
 
 namespace SimiiformesWebApplication.Data
 {
@@ -9,8 +10,8 @@ namespace SimiiformesWebApplication.Data
             : base(options)
         {
         }
-        public DbSet<SimiiformesWebApplication.Models.Person>? Person { get; set; }
-        public DbSet<SimiiformesWebApplication.Models.History>? Histories { get; set; }
+        public DbSet<Person>? Person { get; set; }
+        public DbSet<History>? Histories { get; set; }
 
         public DbSet<Event>? Events { get; set; } = null!;
 
@@ -19,7 +20,7 @@ namespace SimiiformesWebApplication.Data
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
-            
+
             //kapcsolat event és location között, egy eventnek egy locationje van
             //builder.Entity<Event>().HasOne(typeof(Location)).WithOne().HasForeignKey(typeof(Event), "LocationId").OnDelete(DeleteBehavior.Restrict);
         }
