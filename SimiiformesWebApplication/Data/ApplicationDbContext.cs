@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using SimiiformesWebApplication.Models;
 
 namespace SimiiformesWebApplication.Data
 {
@@ -11,5 +10,9 @@ namespace SimiiformesWebApplication.Data
         {
         }
         public DbSet<SimiiformesWebApplication.Models.Person>? Person { get; set; }
+        public DbSet<SimiiformesWebApplication.Models.History>? Histories { get; set; }
+
+
+
     }
 }

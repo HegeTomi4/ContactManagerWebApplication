@@ -48,6 +48,7 @@ namespace SimiiformesWebApplication.Controllers
             }
 
             var person = await _context.Person
+                .Include(p => p.Histories)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (person == null)
             {
@@ -56,6 +57,25 @@ namespace SimiiformesWebApplication.Controllers
 
             return View(person);
         }
+
+        //Delete wrong history
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteHistory(int id)
+        {
+            var history = await _context.Histories.FindAsync(id);
+
+            if (history == null)
+            {
+                return NotFound();
+            }
+
+            _context.Histories.Remove(history);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(Details), new { id = history.PersonId });
+        }
+
 
         // GET: People/Create
 
@@ -131,22 +151,43 @@ namespace SimiiformesWebApplication.Controllers
             var oldImagePath = person.ImagePath;
 
 
-
             if (ModelState.IsValid)
             {
                 try
                 {
                     if (this._context.Person != null)
                     {
-                        foreach (var result in this._context.Person.AsNoTracking())
+                        //History tracking
+                        var oldPerson = await _context.Person.AsNoTracking().SingleOrDefaultAsync(p => p.Id == id);
+                        var oldCompany = oldPerson.Company;
+                        var oldPosition = oldPerson.Position;
+
+                        // Update the person entity with the new values
+                        _context.Update(person);
+
+                        // Set ImagePath before update
+                        person.ImagePath = oldPerson.ImagePath;
+
+                        await _context.SaveChangesAsync();
+
+                        // Check if Company or Position have changed and save the old values to the History table
+                        if (oldCompany != person.Company || oldPosition != person.Position)
                         {
-                            if (result.Id == id)
+                            var history = new History
                             {
-                                oldImagePath = result.ImagePath;
-                                break;
-                            }
+                                PersonId = person.Id,
+                                Company = oldCompany,
+                                Position = oldPosition,
+                            };
+
+                            _context.Histories.Add(history);
+                            await _context.SaveChangesAsync();
                         }
+
+                        // Set oldImagePath
+                        oldImagePath = oldPerson.ImagePath;
                     }
+
                     if (person.ImageFile != null)
                     {
                         // Delete old image                        
@@ -163,10 +204,7 @@ namespace SimiiformesWebApplication.Controllers
                         }
                         person.ImagePath = "/Sources/PeopleImages/" + person.ImageFile.FileName;
                     }
-                    else
-                    {
-                        person.ImagePath = oldImagePath;
-                    }
+
                     _context.Update(person);
                     await _context.SaveChangesAsync();
                 }
@@ -181,9 +219,12 @@ namespace SimiiformesWebApplication.Controllers
                         throw;
                     }
                 }
+
                 return RedirectToAction(nameof(Index));
             }
+
             return View(person);
+
         }
 
         // GET: People/Delete/5
