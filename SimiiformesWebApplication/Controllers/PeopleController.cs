@@ -232,7 +232,7 @@ namespace SimiiformesWebApplication.Controllers
                         }
                         person.ImagePath = "/Sources/PeopleImages/" + person.ImageFile.FileName;
                     }
-
+                    person.Visible = true;
                     _context.Update(person);
                     await _context.SaveChangesAsync();
                 }
