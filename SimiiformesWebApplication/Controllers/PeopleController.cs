@@ -78,8 +78,8 @@ namespace SimiiformesWebApplication.Controllers
 
 
         // GET: People/Create
-
-        [Authorize]
+        //Ellenőrzi, hogy a felhasználó, aki használni kivánja a Create funkciót, rendelkezik-e a szükséges jogosultsággal
+        [Authorize(Roles = $"{nameof(Role.Administrator)},{nameof(Role.Manager)}")]
         public IActionResult Create()
         {
             return View();

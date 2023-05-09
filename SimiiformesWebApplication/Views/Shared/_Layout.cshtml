@@ -8,6 +8,16 @@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/SimiiformesWebApplication.styles.css" asp-append-version="true" />
 </head>
+
+<style>
+    body {
+        background-color: ghostwhite;
+        color: #0E2E5D;
+    }
+</style>
+
+@RenderSection("styles", required: false)
+
 <body>
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
@@ -31,6 +41,13 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="People" asp-action="ShowSearchForm">Keresés</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Events" asp-action="Index">Események</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Locations" asp-action="Index">Helyszín</a>
+                        </li>
+
                     </ul>
                     <partial name="_LoginPartial" />
                 </div>
