@@ -4,58 +4,62 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Kapcsolatok <a asp-action="Create"><i class="fa-solid fa-circle-plus fa-xl" style="color: #31a53f;"></i></a></h1>
+<div class="text-center" style="padding: 30px 0 70px 0">
+    <a asp-action="Create">
+        <button type="submit" class="btn index-buttons">
+            <p style="margin: auto 0">lista készítés</p>
+        </button>
+    </a>
+    <a asp-action="Create">
+        <button type="submit" class="btn index-buttons">
+            <p style="margin: auto 0">új személy</p>
+        </button>
+    </a>
+    <a asp-action="Deleted">
+        <button type="submit" class="btn index-buttons">
+            <p style="margin: auto 0">törölt személyek</p>
+        </button>
+    </a>
+</div>
 
-<p style="float:right">
-    
-    <a asp-action="Deleted">Törölt kapcsolatok</a>
-</p>
 <table class="table">
-    <thead>
-        <tr>
-            <th>
-                
-            </th>
-            <th>
-                @*@Html.DisplayNameFor(model => model.Name)*@
-                Név
-            </th>
-            @*<th>
-                @Html.DisplayNameFor(model => model.Email)
-            </th>*@
-            <th>
-                Cég/Szervezet
-            </th>
-            <th>
-                Pozíció/Tisztség
-            </th>
-        </tr>
-    </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                <img src=@Html.DisplayFor(modelItem => item.ImagePath) alt="portre" style="height:100px"/>
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            @*<td>
-                @Html.DisplayFor(modelItem => item.Email)
-            </td>*@
-            <td>
-                @Html.DisplayFor(modelItem => item.Company)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Position)
-            </td>
-
-            <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id"><i class="fa-solid fa-pen-to-square fa-xl" style="color: #2739c4;"></i></a> |
-                    <a asp-action="Details" asp-route-id="@item.Id"><i class="fa-solid fa-circle-info fa-xl" style="color: #2739c4;"></i></a> |
-                    <a asp-action="Delete" asp-route-id="@item.Id"><i class="fa-solid fa-trash fa-xl" style="color: red;"></i></a>
-            </td>
-        </tr>
-}
+        @for (int i = 0; i < Model.Count(); i += 2)
+        {
+            <div class="row">
+                <div class="col-md-6">
+                    @if (i < Model.Count())
+                    {
+                        var item1 = Model.ElementAt(i);
+                        <a asp-action="Details" asp-route-id="@item1.Id" class="d-flex align-items-center">
+                            <div class="col-3">
+                                <img src="@Html.DisplayFor(modelItem => item1.ImagePath)" alt="portre" style="height:100px; max-width: 100%;" class="mx-auto d-block">
+                            </div>
+                            <div class="col-9">
+                                <h5>@Html.DisplayFor(modelItem => item1.Name)</h5>
+                                <p>@Html.DisplayFor(modelItem => item1.Company)</p>
+                            </div>
+                        </a>
+                    }
+                </div>
+                <div class="col-md-6 nicelink">
+                    @if (i + 1 < Model.Count())
+                    {
+                        var item2 = Model.ElementAt(i + 1);
+                        <a asp-action="Details" asp-route-id="@item2.Id" class="d-flex align-items-center">
+                            <div class="col-3">
+                                <img src="@Html.DisplayFor(modelItem => item2.ImagePath)" alt="portre" style="height:100px; max-width: 100%;" class="mx-auto d-block">
+                            </div>
+                            <div class="col-9">
+                                <h5>@Html.DisplayFor(modelItem => item2.Name)</h5>
+                                <p>@Html.DisplayFor(modelItem => item2.Company)</p>
+                            </div>
+                        </a>
+                    }
+                </div>
+            </div>
+        }
     </tbody>
+
+
 </table>
