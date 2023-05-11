@@ -3,9 +3,12 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SimiiformesWebApplication.Data;
 using SimiiformesWebApplication.Models;
+using System.Data;
 
 namespace SimiiformesWebApplication.Controllers
 {
+    
+    //[Authorize(Roles = $"{nameof(Role.Administrator)},{nameof(Role.Manager)}")]
     public class PeopleController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -16,6 +19,8 @@ namespace SimiiformesWebApplication.Controllers
         }
 
         // GET: People
+
+        //[Authorize(Roles = $"{nameof(Role.Administrator)},{nameof(Role.Manager)}")]
         public async Task<IActionResult> Index()
         {
             return _context.Person != null ?
@@ -106,7 +111,8 @@ namespace SimiiformesWebApplication.Controllers
 
         // GET: People/Create
         //Ellenőrzi, hogy a felhasználó, aki használni kivánja a Create funkciót, rendelkezik-e a szükséges jogosultsággal
-        [Authorize]
+        
+        //[Authorize(Roles = $"{nameof(Role.Administrator)},{nameof(Role.Manager)},{nameof(Role.SystemAdmin)}")]
         public IActionResult Create()
         {
             return View();
@@ -275,7 +281,8 @@ namespace SimiiformesWebApplication.Controllers
         }
 
         // POST: People/Delete/5
-        [Authorize]
+        
+        //[Authorize(Roles = nameof(Role.Administrator))]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)

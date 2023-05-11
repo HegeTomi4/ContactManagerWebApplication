@@ -1,0 +1,42 @@
+﻿@model SimiiformesWebApplication.ViewModels.UserRoleViewModel
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+
+<h4>UserViewModel</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <dl class="row">
+            <dt class="col-sm-4">
+                @Html.DisplayNameFor(model => model.UserName)
+            </dt>
+            <dd class="col-sm-8">
+                @Html.DisplayFor(model => model.UserName)
+            </dd>
+        </dl>
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            
+            <input asp-for="ManagerIsChecked"/> @Role.Manager.ToString() <br />
+            <input asp-for="AdministratorIsChecked"/> @Role.Administrator.ToString() <br />
+            <input asp-for="SystemAdminIsChecked"/> @Role.SystemAdmin.ToString() <br />
+
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
