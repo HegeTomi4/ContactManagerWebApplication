@@ -82,6 +82,7 @@ thead tr {
     }
    .nav-link {
         color: white;
+        margin-top:11px;
     }
 
 .nav-link:hover, nav-link:active {
@@ -91,22 +92,57 @@ thead tr {
 }
 
 
-.index-buttons {
+.index-button1 {
     padding-top: 1rem;
-    display:flex;
-    text-align:center;
-    justify-content:center;
+    text-align: center;
+    justify-content: center;
     border-radius: 25px;
     border-width: 0;
     height: 60px;
     width: 150px;
-    margin: 100px;
-    margin-left:500px;
     background-color: #C6DA2D;
     color: #3E3838;
     font-family: Arial;
     font-weight: bold;
     font-size: 15px;
+    position: absolute;
+    margin: 300px;
+    margin-top:40px;
+}
+
+.index-button2 {
+    padding-top: 1rem;
+    text-align: center;
+    justify-content: center;
+    border-radius: 25px;
+    border-width: 0;
+    height: 60px;
+    width: 150px;
+    background-color: #C6DA2D;
+    color: #3E3838;
+    font-family: Arial;
+    font-weight: bold;
+    font-size: 15px;
+    position: absolute;
+    margin: 600px;
+    margin-top: 40px;
+}
+.index-button3 {
+    padding-top: 1rem;
+    text-align: center;
+    justify-content: center;
+    border-radius: 25px;
+    border-width: 0;
+    height: 60px;
+    width: 150px;
+    background-color: #C6DA2D;
+    color: #3E3838;
+    font-family: Arial;
+    font-weight: bold;
+    font-size: 15px;
+    position: absolute;
+    margin: 900px;
+    margin-top: 40px;
 }
 .index-buttons:hover, index-button:active {
     background-color: #213454;
