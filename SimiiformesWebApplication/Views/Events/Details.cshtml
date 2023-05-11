@@ -1,5 +1,5 @@
 ﻿@model SimiiformesWebApplication.Models.Event
-
+@using SimiiformesWebApplication.Controllers
 @{
     ViewData["Title"] = "Details";
 }
@@ -26,10 +26,49 @@
             @Html.DisplayNameFor(model => model.Location)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Location!.ToString())
+            <label asp-for="Location">@($"{Model.Location.PostalCode} {Model.Location.City}, {Model.Location.Street} {Model.Location.HouseNumber}")</label>
         </dd>
     </dl>
 </div>
+<table class="table">
+    <tbody>
+        @for (int i = 0; i < Model.Guests.Count(); i += 2)
+        {
+            <div class="row">
+                <div class="col-md-6">
+                    @if (i < Model.Guests.Count())
+                    {
+                        var item1 = Model.Guests.ElementAt(i).Person;
+                        <a asp-controller="People" asp-action="Details" asp-route-id="@item1.Id" class="d-flex align-items-center">
+                            <div class="col-3">
+                                <img src="@Html.DisplayFor(modelItem => item1.ImagePath)" alt="portre" style="height:100px; max-width: 100%;" class="mx-auto d-block">
+                            </div>
+                            <div class="col-9">
+                                <h5>@Html.DisplayFor(modelItem => item1.Name)</h5>
+                                <p>@Html.DisplayFor(modelItem => item1.Company)</p>
+                            </div>
+                        </a>
+                    }
+                </div>
+                <div class="col-md-6 nicelink">
+                    @if (i + 1 < Model.Guests.Count())
+                    {
+                        var item2 = Model.Guests.ElementAt(i + 1).Person;
+                        <a asp-controller="People" asp-action="Details" asp-route-id="@item2.Id" class="d-flex align-items-center">
+                            <div class="col-3">
+                                <img src="@Html.DisplayFor(modelItem => item2.ImagePath)" alt="portre" style="height:100px; max-width: 100%;" class="mx-auto d-block">
+                            </div>
+                            <div class="col-9">
+                                <h5>@Html.DisplayFor(modelItem => item2.Name)</h5>
+                                <p>@Html.DisplayFor(modelItem => item2.Company)</p>
+                            </div>
+                        </a>
+                    }
+                </div>
+            </div>
+        }
+    </tbody>
+</table>
 <div>
     <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
     <a asp-action="Index">Back to List</a>

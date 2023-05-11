@@ -16,6 +16,7 @@ namespace SimiiformesWebApplication.Data
         public DbSet<Event>? Events { get; set; } = null!;
 
         public DbSet<Location>? Locations { get; set; } = null!;
+        public DbSet<EventPersonConnection> Connections { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
