@@ -154,6 +154,47 @@ td {
     text-align: center;
 }
 
+.rcorners1 {
+    font-family: Arial, Helvetica,;
+    border-radius: 25px;
+    background: #213454;
+    padding: 30px;
+    width: 400px;
+    height: 400px;
+    position: absolute;
+    margin: 0;
+    margin-left: auto;
+    margin-right: auto;
+    left: 0;
+    right: 0;
+    text-align: center;
+    top: 50%;
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
+    background: rgba(33, 52, 84, 0.9);
+}
+
+.row {
+    margin: 0;
+    background-image: url('../Sources/NewFolder/jakob-dalbjorn-cuKJre3nyYc-unsplash@2x.png');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    overflow: clip;
+}
+
+.form-floating {
+    margin-top: 30px;
+}
+
+.row header {
+    padding: 0;
+}
+
+.container {
+    height: 80vh;
+}
+
 
 .details-image-side {
     display: flex;
@@ -185,13 +226,12 @@ a{
     color: black;
 }
 
-
 .homepage {
     background-color: #213454;
     background-image: url('../Sources/NewFolder/headway-F2KRf_QfCqw-unsplash.jpg');
     background-size: cover;
     background-position: top;
-    
+    overflow: clip;
 }
 
 .text-center{
