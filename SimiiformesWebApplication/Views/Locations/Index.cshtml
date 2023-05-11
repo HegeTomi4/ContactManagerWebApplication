@@ -7,11 +7,14 @@
 <h1>Helyszínek</h1>
 
 <p>
-    <a asp-action="Create">Helyszín létrehozása</a>
+    <a asp-action="Create">Új helyszín</a>
 </p>
 <table class="table">
     <thead>
         <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.PostalCode)
+            </th>
             <th>
                 @Html.DisplayNameFor(model => model.City)
             </th>
@@ -21,15 +24,15 @@
             <th>
                 @Html.DisplayNameFor(model => model.HouseNumber)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.PostalCode)
-            </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
 @foreach (var item in Model) {
         <tr>
+            <td>
+                    @Html.DisplayFor(modelItem => item.PostalCode)
+            </td>
             <td>
                 @Html.DisplayFor(modelItem => item.City)
             </td>
@@ -38,9 +41,6 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.HouseNumber)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PostalCode)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
