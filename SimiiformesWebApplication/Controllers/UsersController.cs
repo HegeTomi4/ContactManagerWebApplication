@@ -20,28 +20,33 @@ namespace SimiiformesWebApplication.Controllers
         private readonly ApplicationDbContext _context;
         private readonly UserManager<IdentityUser> _userManager;
 
-        private readonly RoleManager<IdentityRole> _roleManager;
-
-        public UsersController(ApplicationDbContext context, UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager)
+        public UsersController(ApplicationDbContext context, UserManager<IdentityUser> userManager)
         {
             _context = context;
             this._userManager = userManager;
-            this._roleManager = roleManager;
         }
 
         // GET: UserViewModels
         public async Task<IActionResult> Index()
         {
-            var users = await _userManager.Users.Select(c => new UserViewModel
+            var users = await _context.Users.Select(c => new UserViewModel
             {
                 Id = c.Id,
                 UserName = c.UserName,
-                Role = string.Join(", ", _userManager.GetRolesAsync(c).Result.ToArray())
+                //Role = string.Join(", ", _userManager.GetRolesAsync(c).Result.ToArray())
             }).ToListAsync();
 
+            foreach(var user in users)
+            {
+                foreach( var roleId in _context.UserRoles.Where(c => c.UserId == user.Id).Select(c => c.RoleId).ToList())
+                {
+                    user.Role += _context.Roles.Where(c => c.Id == roleId).Select(c => c.Name).FirstOrDefault() + ", ";
+                }
+                user.Role = user.Role.Remove(user.Role.Length - 2);
+            }
 
             return View(users);
-        }      
+        }
 
         // GET: UserViewModels/Edit/5
         public async Task<IActionResult> Edit(string id)
