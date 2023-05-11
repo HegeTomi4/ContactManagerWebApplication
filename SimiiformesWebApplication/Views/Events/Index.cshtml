@@ -19,22 +19,24 @@
                 @Html.DisplayNameFor(model => model.Date)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.LocationId)
+                @Html.DisplayNameFor(model => model.Location)
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
 @foreach (var item in Model) {
-        <tr>
+            var location = item.Location!.ToString();
+
+            <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.Name)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Date)
             </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.LocationId)
+            <td>                    
+                @Html.DisplayFor(modelItem => location)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |

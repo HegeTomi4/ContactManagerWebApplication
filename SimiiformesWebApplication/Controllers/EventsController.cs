@@ -6,8 +6,10 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using SimiiformesWebApplication.Data;
 using SimiiformesWebApplication.Models;
+using SimiiformesWebApplication.ViewModels;
 
 namespace SimiiformesWebApplication.Controllers
 {
@@ -53,9 +55,9 @@ namespace SimiiformesWebApplication.Controllers
         // GET: Events/Create
         public IActionResult Create()
         {
-            ViewData["LocationId"] = new SelectList(_context.Locations, "Id", "Id");
-            //ez még nem jó, mert csak a city-t tudja megjeleníteni és kéne a egész címSSSS
-            ViewBag.LocationIdName = new SelectList(_context.Locations, "Id", "City").ToList();
+            ViewData["LocationId"] = new SelectList(_context.Locations, "Id", "Id");            
+            ViewBag.LocationIdName = _context.Locations!.Select(x => new SelectListItem { Value = x.Id.ToString(), Text = $"{x.PostalCode} {x.City}, {x.Street} {x.HouseNumber}" });
+            
             return View();
         }
 
@@ -90,8 +92,20 @@ namespace SimiiformesWebApplication.Controllers
             {
                 return NotFound();
             }
-            ViewData["LocationId"] = new SelectList(_context.Locations, "Id", "Id", @event.LocationId);
-            return View(@event);
+            
+            ViewBag.LocationIdName = _context.Locations!.Select(x => new SelectListItem { Value = x.Id.ToString(), Text = $"{x.PostalCode} {x.City}, {x.Street} {x.HouseNumber}" });
+            ViewBag.People = _context.Person!.Select(x => new SelectListItem { Value = x.Id.ToString(), Text = $"{x.Name}" });
+
+            var eventViewModel = new EventViewModel
+            {
+                Id = @event.Id,
+                Name = @event.Name,
+                Date = @event.Date,
+                LocationId = @event.LocationId,
+                Guests = @event.Guests?.Select(x => x.Id).ToArray()
+            };
+
+            return View(eventViewModel);
         }
 
         // POST: Events/Edit/5
@@ -99,9 +113,9 @@ namespace SimiiformesWebApplication.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Date,LocationId")] Event @event)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Date,LocationId,Guests")] EventViewModel eventViewModel)
         {
-            if (id != @event.Id)
+            if (id != eventViewModel.Id)
             {
                 return NotFound();
             }
@@ -110,12 +124,37 @@ namespace SimiiformesWebApplication.Controllers
             {
                 try
                 {
-                    _context.Update(@event);
+                    var entity = await _context.Events
+                        .Include(x => x.Guests)
+                        .FirstOrDefaultAsync(x => x.Id == eventViewModel.Id);
+
+                    if (entity == null)
+                    {
+                        return NotFound();
+                    }
+
+                    entity.Name = eventViewModel.Name;
+                    entity.Date = eventViewModel.Date;
+                    entity.LocationId = eventViewModel.LocationId;
+                    entity.Guests = new List<EventPersonConnection>();
+
+                    foreach (var guest in eventViewModel.Guests)
+                    {
+                        var eventPersonConnection = new EventPersonConnection
+                        {
+                            EventId = entity.Id,
+                            PersonId = guest
+                        };
+
+                        entity.Guests.Add(eventPersonConnection);
+                    }
+                    
+                    _context.Update(entity);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!EventExists(@event.Id))
+                    if (!EventExists(eventViewModel.Id))
                     {
                         return NotFound();
                     }
@@ -126,8 +165,8 @@ namespace SimiiformesWebApplication.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["LocationId"] = new SelectList(_context.Locations, "Id", "Id", @event.LocationId);
-            return View(@event);
+            
+            return View(eventViewModel);
         }
 
         // GET: Events/Delete/5
