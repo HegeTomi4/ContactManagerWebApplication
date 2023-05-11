@@ -13,7 +13,7 @@ using SimiiformesWebApplication.ViewModels;
 
 namespace SimiiformesWebApplication.Controllers
 {
-    //[Authorize(Roles = nameof(Role.Administrator))]
+    [Authorize(Roles = $"{nameof(Role.Administrator)},{nameof(Role.Manager)}")]
     public class EventsController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -44,6 +44,7 @@ namespace SimiiformesWebApplication.Controllers
             var @event = await _context.Events
                 .Include(e => e.Location)
                 .FirstOrDefaultAsync(m => m.Id == id);
+
             if (@event == null)
             {
                 return NotFound();

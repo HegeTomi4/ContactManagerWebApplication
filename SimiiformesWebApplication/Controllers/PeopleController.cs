@@ -8,7 +8,7 @@ using System.Data;
 namespace SimiiformesWebApplication.Controllers
 {
     
-    //[Authorize(Roles = $"{nameof(Role.Administrator)},{nameof(Role.Manager)}")]
+    [Authorize(Roles = $"{nameof(Role.Administrator)},{nameof(Role.Manager)}")]
     public class PeopleController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -20,7 +20,7 @@ namespace SimiiformesWebApplication.Controllers
 
         // GET: People
 
-        //[Authorize(Roles = $"{nameof(Role.Administrator)},{nameof(Role.Manager)}")]
+        [Authorize(Roles = $"{nameof(Role.Administrator)},{nameof(Role.Manager)}")]
         public async Task<IActionResult> Index()
         {
             return _context.Person != null ?
@@ -33,22 +33,6 @@ namespace SimiiformesWebApplication.Controllers
         {
             return _context.Person != null ?
                         View(await _context.Person.Where(p => p.Visible == false).ToListAsync()) :
-                          Problem("Entity set 'ApplicationDbContext.Person'  is null.");
-        }
-
-        // GET: People/ShowSearchForm
-        public async Task<IActionResult> ShowSearchForm()
-        {
-            return _context.Person != null ?
-                        View("ShowSearchForm") :
-                        Problem("Entity set 'ApplicationDbContext.Person'  is null.");
-        }
-
-        // GET: People/ShowSearchResults
-        public async Task<IActionResult> ShowSearchResults(String SearchPhrase)
-        {
-            return _context.Person != null ?
-                        View("Index", await _context.Person.Where(j => j.Name.Contains(SearchPhrase)).ToListAsync()) :
                           Problem("Entity set 'ApplicationDbContext.Person'  is null.");
         }
 
@@ -112,7 +96,7 @@ namespace SimiiformesWebApplication.Controllers
         // GET: People/Create
         //Ellenőrzi, hogy a felhasználó, aki használni kivánja a Create funkciót, rendelkezik-e a szükséges jogosultsággal
         
-        //[Authorize(Roles = $"{nameof(Role.Administrator)},{nameof(Role.Manager)},{nameof(Role.SystemAdmin)}")]
+        [Authorize(Roles = $"{nameof(Role.Administrator)},{nameof(Role.Manager)},{nameof(Role.SystemAdmin)}")]
         public IActionResult Create()
         {
             return View();
@@ -262,7 +246,7 @@ namespace SimiiformesWebApplication.Controllers
         }
 
         // GET: People/Delete/5
-        [Authorize]
+        [Authorize(Roles = nameof(Role.Administrator))]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.Person == null)
@@ -282,7 +266,7 @@ namespace SimiiformesWebApplication.Controllers
 
         // POST: People/Delete/5
         
-        //[Authorize(Roles = nameof(Role.Administrator))]
+        [Authorize(Roles = nameof(Role.Administrator))]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
@@ -302,7 +286,7 @@ namespace SimiiformesWebApplication.Controllers
         }
 
         // GET: People/Restore/5
-        [Authorize]
+        [Authorize(Roles = nameof(Role.Administrator))]
         public async Task<IActionResult> Restore(int? id)
         {
             if (id == null || _context.Person == null)
@@ -321,7 +305,7 @@ namespace SimiiformesWebApplication.Controllers
         }
 
         // POST: People/Restore/5
-        [Authorize]
+        [Authorize(Roles = nameof(Role.Administrator))]
         [HttpPost, ActionName("Restore")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> RestoreConfirmed(int id)
