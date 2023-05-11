@@ -1,7 +1,6 @@
 *{
     margin: 0;
     padding: 0;
-    
 }
 
 html {
@@ -12,6 +11,7 @@ html {
 @media (min-width: 768px) {
   html {
     font-size: 16px;
+    display:flex;
   }
 }
 
@@ -26,14 +26,14 @@ html {
     background-color: #213454;
     font-weight: bold;
     font-size: 18px;
-    /* padding: 20px 0; */
+   
 }
 
 body {
     background-color: ghostwhite;
     color: #0E2E5D;
     width: 100%;
-    
+    font-family:Arial;
 }
 
 thead tr {
@@ -65,25 +65,27 @@ thead tr {
     border-bottom-width:25px;
 }
 .navbar-brand {
-    padding:10px;
-    padding-right:10px;
-    padding-left:10px;
+    
+    padding: 10px;
+    padding-right: 10px;
+    padding-left: 10px;
     color: white;
     display: flex;
+
     font-size: 40px;
     margin-right: 60px;
-    
-    
 }
-    .navbar-brand:hover, navbar-brand:active {
+.navbar-brand:hover, navbar-brand:active 
+{
         color: #213454;
         background-color: #C6DA2D;
         border-radius: 25px;
-    }
-   .nav-link {
-        color: white;
-        margin-top:11px;
-    }
+}
+.nav-link {
+    color: white;
+    margin-top: 11px;
+    border-radius: 25px;
+}
 
 .nav-link:hover, nav-link:active {
     color: #213454;
@@ -144,9 +146,23 @@ thead tr {
     margin: 900px;
     margin-top: 40px;
 }
-.index-buttons:hover, index-button:active {
+.index-button1:hover, index-button:active {
     background-color: #213454;
     color: #C6DA2D;
+    transition-property: background-color;
+    transition-duration: 1s;
+}
+.index-button2:hover, index-button:active {
+    background-color: #213454;
+    color: #C6DA2D;
+    transition-property: background-color;
+    transition-duration: 1s;
+}
+.index-button3:hover, index-button:active {
+    background-color: #213454;
+    color: #C6DA2D;
+    transition-property: background-color;
+    transition-duration: 1s;
 }
 
 td {
@@ -190,13 +206,15 @@ a{
     background-color: #213454;
     background-image: url('../Sources/NewFolder/headway-F2KRf_QfCqw-unsplash.jpg');
     background-size: cover;
-    background-position: top;
-    
+    background-position: center;
+    background-repeat: no-repeat;
+    overflow: hidden;
 }
 
-.text-center{
+.text-center {
     padding: 18%;
-    
+    flex-grow: 1;
+    flex-flow: column nowrap;
 }
 .display-4{
     display:flex;
@@ -246,8 +264,25 @@ a{
     right:450px;
     bottom: 300px;
     font-weight:bold;
+    
 }
 .homepage-button:hover, homepage-button:active{
     background-color: #213454;
     color: #C6DA2D;
+    transition-property: background-color;
+    transition-duration: 1s;
 }
+
+.kapcsolatok-row {
+    display:flex;
+    position:relative;
+    left:100px;
+    top: 150px;
+
+    
+}
+.details-container{
+    display:flex;
+    height:80vh;
+}
+
