@@ -1,10 +1,7 @@
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using SimiiformesWebApplication.Data;
 using SimiiformesWebApplication.Models;
-using System.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,7 +15,7 @@ builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 //Identity config, megerõsített felhasználónak kell lennie (RewuireConfirmedAccount),
 //hozzáadja a role-okat, RoleManager-t (funkciókat biztosít a roleok kezelésére), és az adatbázis kontextust az ApplicationDbContext jelöli
-builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)    
     .AddRoles<IdentityRole>()
     .AddRoleManager<RoleManager<IdentityRole>>()
     .AddEntityFrameworkStores<ApplicationDbContext>();

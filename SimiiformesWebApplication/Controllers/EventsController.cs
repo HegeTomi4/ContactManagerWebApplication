@@ -13,6 +13,7 @@ using SimiiformesWebApplication.ViewModels;
 
 namespace SimiiformesWebApplication.Controllers
 {
+    //[Authorize(Roles = nameof(Role.Administrator))]
     public class EventsController : Controller
     {
         private readonly ApplicationDbContext _context;
