@@ -1,9 +1,15 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
 }
+<html>
+    <link rel="stylesheet" href="~/css/site.css" />
+<body class="homepage">
+    <div class="text-center">
+        <h1 class="display-4">Protokoll Menedzser</h1>
+        <p class="homepage-paragraph">Egy rendszer, amely lehetővé teszi, hogy egy teljes protokoll listát használva képesek legyünk rendezvényekhez a meghívottak névsorának az összeállítására.</p>
+        <a class="homepage-button" asp-area="" asp-controller="People" asp-action="Index">Tovább</a>
+    </div>
+</body>
+</html>
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Landing page</p>
-    <a class="basic-button" asp-area="" asp-controller="People" asp-action="Index">Vágjunk Bele!</a>
-</div>
+
