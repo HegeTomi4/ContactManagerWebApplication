@@ -1,7 +1,9 @@
 *{
     margin: 0;
     padding: 0;
+    
 }
+
 html {
   font-size: 14px;
   display:flex;
@@ -24,7 +26,7 @@ html {
     background-color: #213454;
     font-weight: bold;
     font-size: 18px;
-    padding: 20px 0;
+    /* padding: 20px 0; */
 }
 
 body {
@@ -57,39 +59,58 @@ thead tr {
 }
 
 .navbar{
+    display: flex;
     border-bottom: solid;
     border-bottom-color: #C6DA2D;
     border-bottom-width:25px;
 }
 .navbar-brand {
+    padding:10px;
+    padding-right:10px;
+    padding-left:10px;
+    color: white;
+    display: flex;
     font-size: 40px;
-    padding-right: 60px;
+    margin-right: 60px;
+    
     
 }
-.navbar-nav {
-    font-size: 25px;
-    padding-top: 15px;
-}
-navbar-brand:hover, navbar-brand:active {
-    background-color: #C6DA2D;
+    .navbar-brand:hover, navbar-brand:active {
+        color: #213454;
+        background-color: #C6DA2D;
+        border-radius: 25px;
+    }
+   .nav-link {
+        color: white;
+    }
+
+.nav-link:hover, nav-link:active {
     color: #213454;
-    text-decoration: underline;
-}
-.nav-item:hover, nav-item:active {
-    color: #213454;
     background-color: #C6DA2D;
+    border-radius:25px;
 }
 
 
 .index-buttons {
+    padding-top: 1rem;
+    display:flex;
+    text-align:center;
+    justify-content:center;
     border-radius: 25px;
     border-width: 0;
-    height: 50px;
+    height: 60px;
     width: 150px;
-    margin: 0 30px;
+    margin: 100px;
+    margin-left:500px;
     background-color: #C6DA2D;
     color: #3E3838;
-    font-family:Arial;
+    font-family: Arial;
+    font-weight: bold;
+    font-size: 15px;
+}
+.index-buttons:hover, index-button:active {
+    background-color: #213454;
+    color: #C6DA2D;
 }
 
 td {
@@ -133,6 +154,7 @@ a{
     background-color: #213454;
     background-image: url('../Sources/NewFolder/headway-F2KRf_QfCqw-unsplash.jpg');
     background-size: cover;
+    background-position: top;
     
 }
 
@@ -141,6 +163,7 @@ a{
     
 }
 .display-4{
+    display:flex;
  padding: 0;
  margin: 0;
  font-family: Arial 'Blackadder ITC';
@@ -150,10 +173,11 @@ a{
  font-size: 70px;
  position:absolute;
  z-index:1;
- left: 350px;
+ left: 340px;
  top: 200px;
 }
 .homepage-paragraph {
+    display:flex;
     font-size: 20px;
     font-family: Arial;
     background-color: #2134548b;
@@ -166,9 +190,11 @@ a{
     font-weight: 500;
     width: 1200px;
     position: absolute;
+    left:400px;
     top: 250px;
 }
 .homepage-button {
+    display:flex;   
     font-family: Arial;
     align-items: center;
     justify-content: center;
@@ -181,6 +207,11 @@ a{
     color: #3E3838;
     display: flex;
     position:absolute;
-    right:220px;
-    bottom: 320px;
+    right:450px;
+    bottom: 300px;
+    font-weight:bold;
+}
+.homepage-button:hover, homepage-button:active{
+    background-color: #213454;
+    color: #C6DA2D;
 }
