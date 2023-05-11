@@ -3,60 +3,76 @@
 @{
     ViewData["Title"] = "Details";
 }
+<div class="details-container">
+    <div class="details-image-side">
+        <img src=@Html.DisplayFor(model => model.ImagePath) alt="portre" style="height:200px;width:auto" />
+    </div>
 
-<h1>Részletek</h1>
+    <div class="details-info-side">
+        <dl class="row">
+            
+            <dd class = "col-sm-10">
+                @Html.DisplayFor(model => model.Name)
+            </dd>
+            
+            <dd class = "col-sm-10">
+                @Html.DisplayFor(model => model.Email)
+            </dd>
+            
+            <dd class = "col-sm-10">
+                @Html.DisplayFor(model => model.PhoneNumber)
+            </dd>
+             
+            <dd class = "col-sm-10">
+                @Html.DisplayFor(model => model.Gender)
+            </dd>
+            
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Company)
+            </dd>
+            
+            <dd class = "col-sm-10">
+                @Html.DisplayFor(model => model.Position)
+            </dd>
+            <dd class="col-sm-10" style="font-weight:bold">
+                Megjegyzések:
+            </dd>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Notes)
+            </dd>
+        </dl>
+        <div class="histories">
+        @if (Model.Histories != null && Model.Histories.Count != 0)
+        {
+            <h5>Előző munkahelyek</h5>
+            <table style="text-align:left">
+                @foreach (var history in Model.Histories)
+                {
+                    <tr>
+                        <td>@history.Company:</td>
+                        <td>@history.Position</td>
+                        <td>
+                            <form asp-controller="People" asp-action="DeleteHistory" method="post">
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="id" value="@history.Id" />
+                                <button type="submit" class="btn"
+                                onclick="return confirm('Biztosan törli az előzményt?')">
+                                    <i class="fa-solid fa-trash fa-xl" style="color: red;"></i>
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </table>
+        }
+            <div class="details-actions">
+                <a asp-action="Edit" asp-route-id="@Model?.Id">Szerkeszt</a> |
+                <a asp-action="Index">Vissza</a> |
+                <a asp-action="Delete" asp-route-id="@Model?.Id"><i class="fa-solid fa-trash fa-xl" style="color: red;"></i></a>
 
-<div>
-    <hr />
-    <dl class="row">
-        <dt>
-            <img src=@Html.DisplayFor(model => model.ImagePath) alt="portre" style="height:200px;width:auto" />
-        </dt>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Email)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Email)
-        </dd>
-         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.PhoneNumber)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.PhoneNumber)
-        </dd>
-         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Gender)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Gender)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Company)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Company)
-        </dd>
-         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Position)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Position)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Notes)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Notes)
-        </dd>
-    </dl>
+            </div>
+    </div>
+            
+    </div>
 </div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Szerkeszt</a> |
-    <a asp-action="Index">Vissza</a>
-</div>
+

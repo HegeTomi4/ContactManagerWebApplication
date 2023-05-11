@@ -15,11 +15,14 @@ namespace SimiiformesWebApplication.Models
         public string? ImagePath { get; set; }
         [NotMapped]
         public IFormFile? ImageFile { get; set; }
+        //Törlés esetén ne vesszen el az adat
+        public bool Visible { get; set; }
 
+        //Pozíció előzmények táblával összeköttetés
+        public ICollection<History>? Histories { get; set; }
 
         public Person()
         {
-
         }
     }
 }

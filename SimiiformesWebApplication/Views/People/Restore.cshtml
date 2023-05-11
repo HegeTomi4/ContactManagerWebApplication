@@ -1,0 +1,92 @@
+﻿@model SimiiformesWebApplication.Models.Person
+
+@{
+    ViewData["Title"] = "Restore";
+}
+
+<h1>Törölt kapcsolat</h1>
+<div>
+    <hr />
+    <dl class="row">
+        <dt>
+            <img src=@Html.DisplayFor(model => model.ImagePath) alt="portre" style="height:200px;width:auto" />
+        </dt>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Email)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Email)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.PhoneNumber)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.PhoneNumber)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Gender)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Gender)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Company)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Company)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Position)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Position)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Notes)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Notes)
+        </dd>
+    </dl>
+</div>
+    <div>
+    <h5>Előző munkahelyek</h5>
+    <table>
+        @if(Model.Histories != null)
+        {
+            @foreach (var history in Model.Histories)
+            {
+                <tr>
+                    <td>@history.Company:</td>
+                    <td>@history.Position</td>
+                    <td>
+                        <form asp-controller="People" asp-action="DeleteHistory" method="post">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="id" value="@history.Id" />
+                        </form>
+                    </td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td>Nincsenek előzmények.</td>
+            </tr>
+        }
+
+    </table>
+</div>
+<div>
+    <form asp-action="Restore">
+        <input type="hidden" asp-for="Id" />
+        <input type="submit" value="Visszaállít" class="btn btn-success" /> |
+        <a asp-action="Deleted">Vissza</a>
+    </form>
+</div>

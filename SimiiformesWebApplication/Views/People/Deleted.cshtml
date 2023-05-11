@@ -1,0 +1,60 @@
+﻿@model IEnumerable<SimiiformesWebApplication.Models.Person>
+
+@{
+    ViewData["Title"] = "Index";
+}
+<body class="deleted">
+<h1>Törölt Kapcsolatok</h1>
+
+<p>
+        <a asp-action="Index">Vissza</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+
+            </th>
+            <th>
+                @*@Html.DisplayNameFor(model => model.Name)*@
+                Név
+            </th>
+            @*<th>
+            @Html.DisplayNameFor(model => model.Email)
+            </th>*@
+            <th>
+                Cég/Szervezet
+            </th>
+            <th>
+                Pozíció/Tisztség
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    <img src=@Html.DisplayFor(modelItem => item.ImagePath) alt="portre" style="height:100px" />
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                @*<td>
+            @Html.DisplayFor(modelItem => item.Email)
+            </td>*@
+                <td>
+                    @Html.DisplayFor(modelItem => item.Company)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Position)
+                </td>
+
+                <td>
+                    <a asp-action="Restore" asp-route-id="@item.Id">Részletek</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+</body>

@@ -19,7 +19,15 @@ namespace SimiiformesWebApplication.Controllers
         public async Task<IActionResult> Index()
         {
             return _context.Person != null ?
-                        View(await _context.Person.ToListAsync()) :
+                        View(await _context.Person.Where(p => p.Visible == true).ToListAsync()) :
+                          Problem("Entity set 'ApplicationDbContext.Person'  is null.");
+        }
+
+        // GET: DeletedPeople
+        public async Task<IActionResult> Deleted()
+        {
+            return _context.Person != null ?
+                        View(await _context.Person.Where(p => p.Visible == false).ToListAsync()) :
                           Problem("Entity set 'ApplicationDbContext.Person'  is null.");
         }
 
@@ -48,6 +56,7 @@ namespace SimiiformesWebApplication.Controllers
             }
 
             var person = await _context.Person
+                .Include(p => p.Histories)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (person == null)
             {
@@ -57,8 +66,46 @@ namespace SimiiformesWebApplication.Controllers
             return View(person);
         }
 
-        // GET: People/Create
+        // GET: People/DeletedDetails/5
+        public async Task<IActionResult> DeletedDetails(int? id)
+        {
+            if (id == null || _context.Person == null)
+            {
+                return NotFound();
+            }
 
+            var person = await _context.Person
+                .Include(p => p.Histories)
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (person == null)
+            {
+                return NotFound();
+            }
+
+            return View(person);
+        }
+
+        //Delete wrong history
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteHistory(int id)
+        {
+            var history = await _context.Histories.FindAsync(id);
+
+            if (history == null)
+            {
+                return NotFound();
+            }
+
+            _context.Histories.Remove(history);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(Details), new { id = history.PersonId });
+        }
+
+
+        // GET: People/Create
+        //Ellenőrzi, hogy a felhasználó, aki használni kivánja a Create funkciót, rendelkezik-e a szükséges jogosultsággal
         [Authorize]
         public IActionResult Create()
         {
@@ -91,6 +138,7 @@ namespace SimiiformesWebApplication.Controllers
                 {
                     person.ImagePath = "/Sources/PeopleImages/Default.jpg";
                 }
+                person.Visible = true;
                 _context.Add(person);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -131,22 +179,43 @@ namespace SimiiformesWebApplication.Controllers
             var oldImagePath = person.ImagePath;
 
 
-
             if (ModelState.IsValid)
             {
                 try
                 {
                     if (this._context.Person != null)
                     {
-                        foreach (var result in this._context.Person.AsNoTracking())
+                        //History tracking
+                        var oldPerson = await _context.Person.AsNoTracking().SingleOrDefaultAsync(p => p.Id == id);
+                        var oldCompany = oldPerson.Company;
+                        var oldPosition = oldPerson.Position;
+
+                        // Update the person entity with the new values
+                        _context.Update(person);
+
+                        // Set ImagePath before update
+                        person.ImagePath = oldPerson.ImagePath;
+
+                        await _context.SaveChangesAsync();
+
+                        // Check if Company or Position have changed and save the old values to the History table
+                        if (oldCompany != person.Company || oldPosition != person.Position)
                         {
-                            if (result.Id == id)
+                            var history = new History
                             {
-                                oldImagePath = result.ImagePath;
-                                break;
-                            }
+                                PersonId = person.Id,
+                                Company = oldCompany,
+                                Position = oldPosition,
+                            };
+
+                            _context.Histories.Add(history);
+                            await _context.SaveChangesAsync();
                         }
+
+                        // Set oldImagePath
+                        oldImagePath = oldPerson.ImagePath;
                     }
+
                     if (person.ImageFile != null)
                     {
                         // Delete old image                        
@@ -163,10 +232,7 @@ namespace SimiiformesWebApplication.Controllers
                         }
                         person.ImagePath = "/Sources/PeopleImages/" + person.ImageFile.FileName;
                     }
-                    else
-                    {
-                        person.ImagePath = oldImagePath;
-                    }
+                    person.Visible = true;
                     _context.Update(person);
                     await _context.SaveChangesAsync();
                 }
@@ -181,9 +247,12 @@ namespace SimiiformesWebApplication.Controllers
                         throw;
                     }
                 }
+
                 return RedirectToAction(nameof(Index));
             }
+
             return View(person);
+
         }
 
         // GET: People/Delete/5
@@ -218,7 +287,46 @@ namespace SimiiformesWebApplication.Controllers
             var person = await _context.Person.FindAsync(id);
             if (person != null)
             {
-                _context.Person.Remove(person);
+                person.Visible = false;
+            }
+
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
+
+        // GET: People/Restore/5
+        [Authorize]
+        public async Task<IActionResult> Restore(int? id)
+        {
+            if (id == null || _context.Person == null)
+            {
+                return NotFound();
+            }
+
+            var person = await _context.Person
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (person == null)
+            {
+                return NotFound();
+            }
+
+            return View(person);
+        }
+
+        // POST: People/Restore/5
+        [Authorize]
+        [HttpPost, ActionName("Restore")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> RestoreConfirmed(int id)
+        {
+            if (_context.Person == null)
+            {
+                return Problem("Entity set 'ApplicationDbContext.Person'  is null.");
+            }
+            var person = await _context.Person.FindAsync(id);
+            if (person != null)
+            {
+                person.Visible = true;
             }
 
             await _context.SaveChangesAsync();
