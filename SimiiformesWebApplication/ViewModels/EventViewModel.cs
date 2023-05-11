@@ -1,7 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using SimiiformesWebApplication.Models;
 using System.ComponentModel;
-using SimiiformesWebApplication.Models;
-using Microsoft.AspNetCore.Mvc.Rendering;
+using System.ComponentModel.DataAnnotations;
 
 namespace SimiiformesWebApplication.ViewModels
 {

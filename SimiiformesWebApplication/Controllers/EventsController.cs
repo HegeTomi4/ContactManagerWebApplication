@@ -1,35 +1,41 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using NuGet.Packaging;
 using SimiiformesWebApplication.Data;
 using SimiiformesWebApplication.Models;
 using SimiiformesWebApplication.ViewModels;
 
 namespace SimiiformesWebApplication.Controllers
 {
+    //[Authorize(Roles = nameof(Role.Administrator))]
     public class EventsController : Controller
     {
         private readonly ApplicationDbContext _context;
 
         public EventsController(ApplicationDbContext context)
         {
-            _context = context;            
+            _context = context;
         }
 
         // GET: Events
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Events.Include(e => e.Location);
+            var applicationDbContext = _context.Events.Include(e => e.Location).OrderByDescending(e => e.Date);
             return View(await applicationDbContext.ToListAsync());
             //return _context.Events != null ?
             //            View(await _context.Events.ToListAsync()) :
             //              Problem("Entity set 'ApplicationDbContext.Events'  is null.");
+        }
+
+        //GET: Invited People
+        public async Task<List<Person>> GetInvitedPeople(int? eventId)
+        {
+            return await _context.Connections
+                .Where(x => x.EventId == eventId)
+                .Select(x => x.Person)
+                .ToListAsync();
         }
 
         // GET: Events/Details/5
@@ -41,23 +47,35 @@ namespace SimiiformesWebApplication.Controllers
             }
 
             var @event = await _context.Events
-                .Include(e => e.Location)
+                .Include(e => e.Location).Include(e => e.Guests)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (@event == null)
             {
                 return NotFound();
             }
+            ViewBag.LocationIdName = _context.Locations!.Select(x => new SelectListItem { Value = x.Id.ToString(), Text = $"{x.PostalCode} {x.City}, {x.Street} {x.HouseNumber}" });
+            var invitedPeople = await GetInvitedPeople(id);
+
+            var eventDetailsViewModel = new Event
+            {
+                Id = @event.Id,
+                Name = @event.Name,
+                Date = @event.Date,
+                Location = @event.Location,
+                Guests = invitedPeople.Select(p => new EventPersonConnection { Person = p }).ToList()
+            };
 
             return View(@event);
         }
+
 
         //
         // GET: Events/Create
         public IActionResult Create()
         {
-            ViewData["LocationId"] = new SelectList(_context.Locations, "Id", "Id");            
+            ViewData["LocationId"] = new SelectList(_context.Locations, "Id", "Id");
             ViewBag.LocationIdName = _context.Locations!.Select(x => new SelectListItem { Value = x.Id.ToString(), Text = $"{x.PostalCode} {x.City}, {x.Street} {x.HouseNumber}" });
-            
+
             return View();
         }
 
@@ -76,7 +94,15 @@ namespace SimiiformesWebApplication.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["LocationId"] = new SelectList(_context.Locations, "Id", "Id", @event.LocationId);
-            return View(@event); 
+            return View(@event);
+        }
+
+        public async Task<ICollection<int>> GetInvitedPeopleId(int? eventId)
+        {
+            return await _context.Connections
+                .Where(x => x.EventId == eventId)
+                .Select(x => x.PersonId)
+                .ToListAsync();
         }
 
         // GET: Events/Edit/5
@@ -92,9 +118,11 @@ namespace SimiiformesWebApplication.Controllers
             {
                 return NotFound();
             }
-            
+
             ViewBag.LocationIdName = _context.Locations!.Select(x => new SelectListItem { Value = x.Id.ToString(), Text = $"{x.PostalCode} {x.City}, {x.Street} {x.HouseNumber}" });
             ViewBag.People = _context.Person!.Select(x => new SelectListItem { Value = x.Id.ToString(), Text = $"{x.Name}" });
+
+            var invitedPeople = await GetInvitedPeopleId(id);
 
             var eventViewModel = new EventViewModel
             {
@@ -102,7 +130,7 @@ namespace SimiiformesWebApplication.Controllers
                 Name = @event.Name,
                 Date = @event.Date,
                 LocationId = @event.LocationId,
-                Guests = @event.Guests?.Select(x => x.Id).ToArray()
+                Guests = invitedPeople
             };
 
             return View(eventViewModel);
@@ -115,7 +143,7 @@ namespace SimiiformesWebApplication.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Date,LocationId,Guests")] EventViewModel eventViewModel)
         {
-            if (id != eventViewModel.Id)
+            if (eventViewModel == null || id != eventViewModel.Id)
             {
                 return NotFound();
             }
@@ -125,8 +153,8 @@ namespace SimiiformesWebApplication.Controllers
                 try
                 {
                     var entity = await _context.Events
-                        .Include(x => x.Guests)
-                        .FirstOrDefaultAsync(x => x.Id == eventViewModel.Id);
+                                    .Include(x => x.Guests)
+                                    .FirstOrDefaultAsync(x => x.Id == eventViewModel.Id);
 
                     if (entity == null)
                     {
@@ -136,19 +164,25 @@ namespace SimiiformesWebApplication.Controllers
                     entity.Name = eventViewModel.Name;
                     entity.Date = eventViewModel.Date;
                     entity.LocationId = eventViewModel.LocationId;
-                    entity.Guests = new List<EventPersonConnection>();
 
-                    foreach (var guest in eventViewModel.Guests)
+                    var newGuestIds = eventViewModel.Guests ?? new int[0];
+                    var existingGuestIds = entity.Guests.Select(x => x.PersonId);
+
+                    // remove guests that are not in the new guest list
+                    var guestsToRemove = entity.Guests.Where(x => !newGuestIds.Contains(x.PersonId)).ToList();
+                    foreach (var guest in guestsToRemove)
                     {
-                        var eventPersonConnection = new EventPersonConnection
-                        {
-                            EventId = entity.Id,
-                            PersonId = guest
-                        };
-
-                        entity.Guests.Add(eventPersonConnection);
+                        entity.Guests.Remove(guest);
                     }
-                    
+
+                    // add new guests that are not already in the guest list
+                    var guestsToAdd = newGuestIds.Except(existingGuestIds).Select(x => new EventPersonConnection
+                    {
+                        EventId = entity.Id,
+                        PersonId = x
+                    });
+                    entity.Guests.AddRange(guestsToAdd);
+
                     _context.Update(entity);
                     await _context.SaveChangesAsync();
                 }
@@ -165,7 +199,7 @@ namespace SimiiformesWebApplication.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            
+
             return View(eventViewModel);
         }
 
@@ -202,14 +236,14 @@ namespace SimiiformesWebApplication.Controllers
             {
                 _context.Events.Remove(@event);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool EventExists(int id)
         {
-          return (_context.Events?.Any(e => e.Id == id)).GetValueOrDefault();
+            return (_context.Events?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }
 }

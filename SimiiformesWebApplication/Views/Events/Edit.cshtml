@@ -4,9 +4,7 @@
     ViewData["Title"] = "Edit";
 }
 
-<h1>Edit</h1>
-
-<h4>Event</h4>
+<h1>Szerkesztés</h1>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -29,23 +27,26 @@
                 <span asp-validation-for="LocationId" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Guests" class="control-label"></label>
-                <select multiple="multiple" asp-for="Guests" class="form-control" asp-items="ViewBag.People">
-                    @*<option selected="selected" value="1">HR</option>
-                    <option value="2">IT</option>
-                    <option value="3">Account</option>*@
-
-                </select>
+                <label asp-for="Guests" class="control-label">Vendégek</label><br>
+                    @foreach (var item in (IEnumerable<SelectListItem>)ViewBag.People)
+                    {
+                        bool isChecked = Model.Guests?.Contains(int.Parse(item.Value)) ?? false;
+                        <label>
+                        <input type="checkbox" name="Guests" value="@item.Value" @(isChecked ? "checked" : "") />
+                            @item.Text
+                        </label>
+                        <br>
+                    }
             </div>
             <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+                <input type="submit" value="Mentés" class="btn btn-primary" />
             </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index">Vissza</a>
 </div>
 
 @section Scripts {

@@ -1,0 +1,48 @@
+@font-face {
+    font-family: "Black";
+    src: url('AirbnbCerealBlack.ttf');
+}
+
+@font-face {
+    font-family: "Bold";
+    src: url('AirbnbCerealBold.ttf');
+}
+
+@font-face {
+    font-family: "Book";
+    src: url('AirbnbCerealBook.ttf');
+}
+
+@font-face {
+    font-family: "ExtraBold";
+    src: url('AirbnbCerealExtraBold.ttf');
+}
+
+@font-face {
+    font-family: "Light";
+    src: url('AirbnbCerealLight.ttf');
+}
+
+@font-face {
+    font-family: "Medium";
+    src: url('AirbnbCerealMedium.ttf');
+}
+
+.airbnbBlack {
+    font-family: Black;
+}
+.airbnbBold {
+    font-family: Bold;
+}
+.airbnbBook {
+    font-family: Book;
+}
+.airbnbExtraBold {
+    font-family: ExtraBold;
+}
+.airbnbLight {
+    font-family: Light;
+}
+.airbnbMedium {
+    font-family: Medium;
+}

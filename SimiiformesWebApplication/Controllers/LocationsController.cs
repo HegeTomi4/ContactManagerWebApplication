@@ -1,16 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using SimiiformesWebApplication.Data;
 using SimiiformesWebApplication.Models;
 
 namespace SimiiformesWebApplication.Controllers
 {
+    //[Authorize(Roles = nameof(Role.Administrator))]
     public class LocationsController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -23,9 +19,9 @@ namespace SimiiformesWebApplication.Controllers
         // GET: Locations
         public async Task<IActionResult> Index()
         {
-              return _context.Locations != null ? 
-                          View(await _context.Locations.ToListAsync()) :
-                          Problem("Entity set 'ApplicationDbContext.Locations'  is null.");
+            return _context.Locations != null ?
+                        View(await _context.Locations.OrderBy(l => l.City).ToListAsync()) :
+                        Problem("Entity set 'ApplicationDbContext.Locations'  is null.");
         }
 
         // GET: Locations/Details/5
@@ -152,14 +148,14 @@ namespace SimiiformesWebApplication.Controllers
             {
                 _context.Locations.Remove(location);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool LocationExists(int id)
         {
-          return (_context.Locations?.Any(e => e.Id == id)).GetValueOrDefault();
+            return (_context.Locations?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }
 }
