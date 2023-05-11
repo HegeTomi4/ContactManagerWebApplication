@@ -26,7 +26,10 @@
             @Html.DisplayNameFor(model => model.Location)
         </dt>
         <dd class = "col-sm-10">
-            <label asp-for="Location">@($"{Model.Location.PostalCode} {Model.Location.City}, {Model.Location.Street} {Model.Location.HouseNumber}")</label>
+            @{
+                var location = Model.Location!.ToString();
+                @Html.DisplayFor(model => location)
+            }
         </dd>
     </dl>
 </div>

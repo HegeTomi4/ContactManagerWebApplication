@@ -14,7 +14,7 @@ using SimiiformesWebApplication.ViewModels;
 
 namespace SimiiformesWebApplication.Controllers
 {
-    //[Authorize(Roles = nameof(Role.SystemAdmin))]
+    [Authorize(Roles = nameof(Role.SystemAdmin))]
     public class UsersController : Controller
     {
         private readonly ApplicationDbContext _context;

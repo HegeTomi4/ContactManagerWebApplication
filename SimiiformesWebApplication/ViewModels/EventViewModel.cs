@@ -17,7 +17,7 @@ namespace SimiiformesWebApplication.ViewModels
 
         [DisplayName("Helyszín azonosítója")]
         public int LocationId { get; set; }
-
+        //muliselec-t kiválasztást tárolja
         public ICollection<int>? Guests { get; set; }
 
         [DisplayName("Helyszín")]

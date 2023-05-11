@@ -6,7 +6,7 @@ using SimiiformesWebApplication.Models;
 
 namespace SimiiformesWebApplication.Controllers
 {
-    //[Authorize(Roles = nameof(Role.Administrator))]
+    [Authorize(Roles = $"{nameof(Role.Administrator)},{nameof(Role.Manager)}")]
     public class LocationsController : Controller
     {
         private readonly ApplicationDbContext _context;
