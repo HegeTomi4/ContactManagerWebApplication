@@ -45,18 +45,24 @@ thead tr {
 
 .basic-button {
     width: fit-content;
-    border: 1px solid #8a8a8a;
-    background: azure;
-    border-radius: 7px;
-    color: #000;
+    border: 0px solid #8a8a8a;
+    background: #213454;
+    border-radius: 25px;
+    color: white;
     height: 40px;
     margin-top: 20px;
     align-items: center;
     justify-content: center;
     padding: 10px;
+    padding-top: 8px;
     text-decoration: none;
     font-family: Arial;
 }
+
+    .basic-button:hover, basic-button:active {
+        background: #C6DA2D;
+        color: #213454;
+    }
 
 .navbar{
     display: flex;
@@ -101,7 +107,7 @@ thead tr {
     border-radius: 25px;
     border-width: 0;
     height: 60px;
-    width: 150px;
+    width: 160px;
     background-color: #C6DA2D;
     color: #3E3838;
     font-family: Arial;
@@ -119,7 +125,7 @@ thead tr {
     border-radius: 25px;
     border-width: 0;
     height: 60px;
-    width: 150px;
+    width: 160px;
     background-color: #C6DA2D;
     color: #3E3838;
     font-family: Arial;
@@ -136,7 +142,7 @@ thead tr {
     border-radius: 25px;
     border-width: 0;
     height: 60px;
-    width: 150px;
+    width: 160px;
     background-color: #C6DA2D;
     color: #3E3838;
     font-family: Arial;
@@ -166,7 +172,7 @@ thead tr {
 }
 
 td {
-    line-height: 100px;
+    line-height: 60px;
     text-align: center;
 }
 
@@ -190,7 +196,7 @@ td {
     background: rgba(33, 52, 84, 0.9);
 }
 
-.row {
+.row1 {
     margin: 0;
     background-image: url('../Sources/NewFolder/jakob-dalbjorn-cuKJre3nyYc-unsplash@2x.png');
     background-position: center;

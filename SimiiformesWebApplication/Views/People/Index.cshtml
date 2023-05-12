@@ -1,11 +1,12 @@
 ﻿@model IEnumerable<SimiiformesWebApplication.Models.Person>
+@using SimiiformesWebApplication.Controllers
 
 @{
     ViewData["Title"] = "Index";
 }
 
 <div>
-    <a asp-action="Create">
+    <a asp-controller="Events" asp-action="Create">
         <button type="submit" class="btn index-button1">
             <p >Esemény készítés</p>
         </button>
